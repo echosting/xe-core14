@@ -11,7 +11,9 @@
         var $lang_code = null;
 
         var $allow_trackback_status = null;
-
+        var $allowscriptaccessList = array();
+        var $allowscriptaccessKey = 0;
+		
         function documentItem($document_srl = 0, $load_extra_vars = true) {
             $this->document_srl = $document_srl;
 
@@ -248,11 +250,48 @@
             $_SESSION['accessible'][$this->document_srl] = true;
 
             $content = $this->get('content');
-
+            $content = preg_replace_callback('/<(object|param|embed)[^>]*/is', array($this, '_checkAllowScriptAccess'), $content);
+            $content = preg_replace_callback('/<object[^>]*>/is', array($this, '_addAllowScriptAccess'), $content);
+			
             if($strlen) return cut_str(strip_tags($content),$strlen,'...');
 
             return htmlspecialchars($content);
         }
+
+
+		function _addAllowScriptAccess($m) {
+				if($this->allowscriptaccessList[$this->allowscriptaccessKey] == 1) {
+						$m[0] = $m[0].'<param name="allowscriptaccess" value="never"></param>';
+				}
+				$this->allowscriptaccessKey++;
+				return $m[0];
+		}
+
+		function _checkAllowScriptAccess($m) {
+				if($m[1] == 'object') {
+						$this->allowscriptaccessList[] = 1;
+				}
+
+				if($m[1] == 'param') {
+						if(stripos($m[0], 'allowscriptaccess')) {
+								$m[0] = '<param name="allowscriptaccess" value="never"';
+								if(substr($m[0], -1) == '/') {
+										$m[0] .= '/';
+								}
+							$this->allowscriptaccessList[count($this->allowscriptaccessList)-1]--;
+						}
+				}
+				else if($m[1] == 'embed') {
+						if(stripos($m[0], 'allowscriptaccess')) {
+								$m[0] = str_ireplace(array('always', 'samedomain'), 'never', $m[0]);
+						}
+						else {
+								$m[0] = str_ireplace('<embed', '<embed allowscriptaccess="never"', $m[0]);
+						}
+				}
+			return $m[0];
+		}
+	
 
         function getContent($add_popup_menu = true, $add_content_info = true, $resource_realpath = false, $add_xe_content_class = true, $stripEmbedTagException = false) {
             if(!$this->document_srl) return;
