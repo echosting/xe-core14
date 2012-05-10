@@ -111,6 +111,9 @@
             Context::set('selected_mids', $mid_list[$selected_module]->list);
             Context::set('module_category_exists', $module_category_exists);
 
+            $security = new Security();
+            $security->encodeHTML('id', 'type');
+
             // 레이아웃을 팝업으로 지정
             $this->setLayoutFile('popup_layout');
 
