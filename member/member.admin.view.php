@@ -91,8 +91,14 @@
             $editor = $oEditorModel->getEditor(0, $option);
             Context::set('editor', $editor);
 
+            // 약관은 인코딩하지 않기 위해 인코딩 전의 약관을 임시로 다른 변수로 이동 (오류 제보: snows96)
+            $_agreement = $config->agreement;
+
 			$security = new Security();
 			$security->encodeHTML('config..');
+
+            // 인코딩된 약관을 인코딩 전의 약관으로 교체
+            $config->agreement = $_agreement;
 			
             $this->setTemplateFile('member_config');
         }
