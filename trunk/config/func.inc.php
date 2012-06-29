@@ -648,7 +648,7 @@
      **/
     function removeHackTag($content) {
         // 특정 태그들을 일반 문자로 변경
-        $content = preg_replace('/<(\/?)(iframe|script|meta|style|applet|link|base|html|body)/is', '&lt;$1$2', $content);
+        $content = preg_replace('@<(\/?(?:html|body|head|title|meta|base|link|script|style|applet|iframe)(/*)[\w\s>])@i', '&lt;$1', $content);
 
         /**
          * 이미지나 동영상등의 태그에서 src에 관리자 세션을 악용하는 코드를 제거
