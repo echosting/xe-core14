@@ -108,6 +108,15 @@
             $output = executeQuery('comment.getChildCommentCount', $args);
             return (int)$output->data->count;
         }
+		
+		/**
+		 * @brief 자식 답글 리턴
+		 **/
+        function getChildComments($comment_srl) {
+            $args->comment_srl = $comment_srl;
+            $output = executeQueryArray('comment.getChildComments', $args);
+            return $output->data;
+        }
 
         /**
          * @brief 댓글 가져오기
