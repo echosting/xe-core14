@@ -368,8 +368,29 @@
             if(!$output->toBool()) return $output;
 
             // 해당 댓글에 child가 있는지 확인
-            $child_count = $oCommentModel->getChildCommentCount($comment_srl);
-            if($child_count>0) return new Object(-1, 'fail_to_delete_have_children');
+            $childs = $oCommentModel->getChildComments($comment_srl);
+            if(count($childs) > 0) {
+                $deleteAllComment = true;
+                if (!$is_admin) {
+					$logged_info = Context::get('logged_info');
+					foreach($childs as $val) {
+						if($val->member_srl != $logged_info->member_srl) {
+							$deleteAllComment = false;
+							break;
+						}
+					}
+				}
+
+				if(!$deleteAllComment) {
+					return new Object(-1, 'fail_to_delete_have_children');
+				}
+				else {
+					foreach($childs as $val) {
+						$output = $this->deleteComment($val->comment_srl, $is_admin, $isMoveToTrash);
+						if(!$output->toBool()) return $output;
+					}
+				}
+			}
 
             // 권한이 있는지 확인
             if(!$is_admin && !$comment->isGranted()) return new Object(-1, 'msg_not_permitted');
