@@ -106,6 +106,7 @@
     $lang->cmd_manage_id = 'Prohibited IDs';
     $lang->cmd_manage_form = 'Sign up Form';
     $lang->cmd_view_own_document = 'Written Articles';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = 'Manage Member Info';
     $lang->cmd_trace_document = 'Trace Written Articles';
     $lang->cmd_trace_comment = 'Trace Written Comments';

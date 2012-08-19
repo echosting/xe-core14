@@ -106,6 +106,7 @@
     $lang->cmd_manage_id = 'Управление запрещенными ID';
     $lang->cmd_manage_form = 'Управление формой регистрации';
     $lang->cmd_view_own_document = 'Просмотреть написанные записи';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = 'Изменить информацию пользователя';
     $lang->cmd_trace_document = 'Trace Written Articles';
     $lang->cmd_trace_comment = 'Trace Written Comments';

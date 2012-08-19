@@ -106,6 +106,7 @@
     $lang->cmd_manage_id = 'Administrer les Comptes Interdits';
     $lang->cmd_manage_form = 'Administrer la Forme d\'Inscription';
     $lang->cmd_view_own_document = 'Voir les Articles écrits';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = 'Manage Member Info';
     $lang->cmd_trace_document = 'Tracer les Articles écrits';
     $lang->cmd_trace_comment = 'Tracer les Commentaires écrits';
