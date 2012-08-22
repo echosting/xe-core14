@@ -107,6 +107,7 @@
     $lang->cmd_manage_id = '금지 아이디 관리';
     $lang->cmd_manage_form = '가입 폼 관리';
     $lang->cmd_view_own_document = '작성 글 보기';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = '회원 정보 관리';
     $lang->cmd_trace_document = '작성글 추적';
     $lang->cmd_trace_comment = '작성 댓글 추적';

@@ -108,6 +108,7 @@
     $lang->cmd_manage_id = 'Tên sử dụng cấm đăng kí';
     $lang->cmd_manage_form = 'Quản lý mẫu đăng kí';
     $lang->cmd_view_own_document = 'Bài gửi';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = 'Quản lý thông tin thành viên';
     $lang->cmd_trace_document = 'Theo dõi chủ đề';
     $lang->cmd_trace_comment = 'Theo dõi thảo luận';

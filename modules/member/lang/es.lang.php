@@ -105,6 +105,7 @@
     $lang->cmd_manage_id = 'Manejo de ID prohibidos';
     $lang->cmd_manage_form = 'Manejo de forma del registro';
     $lang->cmd_view_own_document = 'Ver documentos escritos';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = 'Manage Member Info';
     $lang->cmd_trace_document = 'Trace Written Articles';
     $lang->cmd_trace_comment = 'Trace Written Comments';

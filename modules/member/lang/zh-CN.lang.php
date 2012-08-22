@@ -107,6 +107,7 @@
     $lang->cmd_manage_id = '禁止用户名';
     $lang->cmd_manage_form = '扩展注册表单';
     $lang->cmd_view_own_document = '会员话题';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = '管理会员信息';
     $lang->cmd_trace_document = '主题追踪';
     $lang->cmd_trace_comment = '评论追踪';

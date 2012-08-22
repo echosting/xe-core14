@@ -43,7 +43,7 @@
 
             // Validate variables to prevent XSS
             if($this->module && !preg_match("/^([a-z0-9\_\-]+)$/i",$this->module)) die(Context::getLang("msg_invalid_request"));
-            if($this->mid && !preg_match("/^([a-z0-9\_\-]+)$/i",$this->mid)) die(Context::getLang("msg_invalid_request"));
+            if($this->mid && !preg_match("/^([a-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\_\-]+)$/i",$this->mid)) die(Context::getLang("msg_invalid_request"));
             if($this->act && !preg_match("/^([a-z0-9\_\-]+)$/i",$this->act)) die(Context::getLang("msg_invalid_request"));
 
             // execute addon (before module initialization)
