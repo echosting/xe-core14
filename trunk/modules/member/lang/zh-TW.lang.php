@@ -106,6 +106,7 @@
     $lang->cmd_manage_id = '禁止帳號管理';
     $lang->cmd_manage_form = '註冊表單管理';
     $lang->cmd_view_own_document = '檢視發表主題';
+	$lang->cmd_view_own_comment = '작성 댓글 보기';
     $lang->cmd_manage_member_info = '管理會員資料';
     $lang->cmd_trace_document = '主題追蹤';
     $lang->cmd_trace_comment = '評論追蹤';

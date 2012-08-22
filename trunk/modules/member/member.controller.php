@@ -423,6 +423,11 @@
             if(!Context::get('is_logged')) return new Object(-1, 'msg_not_logged');
 
             $logged_info = Context::get('logged_info');
+			
+            // 해당 mid, vid에 쓰기 권한이 있는지 체크 (2012-06-30 by CMD)
+            $oModuleModel = &getModel('module');
+            $module_info = $oModuleModel->getModuleInfoByMid(Context::get('mid'));
+            if(!$oModuleModel->getGrant($module_info, $logged_info)->write_document) return new Object(-1, 'msg_not_permitted');
 
             // form 정보를 모두 받음
             $obj = Context::getRequestVars();
@@ -444,6 +449,8 @@
 
             // 이미 존재하는 경우 수정
             if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) {
+                // 해당 문서에 대한 권한이 있는지 체크 (2012-06-30 by CMD)
+                if(!$oDocument->isGranted()) return new Object(-1,'msg_not_permitted');
                 $output = $oDocumentController->updateDocument($oDocument, $obj);
                 $msg_code = 'success_updated';
 
@@ -1544,6 +1551,7 @@
             $this->addMemberMenu( 'dispMemberScrappedDocument', 'cmd_view_scrapped_document');
             $this->addMemberMenu( 'dispMemberSavedDocument', 'cmd_view_saved_document');
             $this->addMemberMenu( 'dispMemberOwnDocument', 'cmd_view_own_document');
+			$this->addMemberMenu( 'dispMemberOwnComment', 'cmd_view_own_comment');
         }
 
         /**
