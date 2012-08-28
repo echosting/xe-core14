@@ -87,11 +87,36 @@
             // 템플릿 파일 지정
             $this->setTemplateFile('signup_form');
         }
+		
+		function dispMemberModifyInfoBefore() {
+			$logged_info = Context::get('logged_info');
+			$oMemberModel = &getModel('member');
+			if(!$oMemberModel->isLogged() || empty($logged_info)) return $this->stop('msg_not_logged');
+
+			$_SESSION['rechecked_password_step'] = 'INPUT_PASSWORD';
+
+			$templateFile = $this->getTemplatePath().'rechecked_password.html';
+			if(!is_readable($templateFile)) {
+				$templatePath = sprintf('%sskins/default', $this->module_path);
+				$this->setTemplatePath($templatePath);
+			}
+			
+			Context::set('member_info', $logged_info);
+
+			$this->setTemplateFile('rechecked_password');
+		}
 
         /**
          * @brief 회원 정보 수정
          **/
         function dispMemberModifyInfo() {
+			if($_SESSION['rechecked_password_step'] != 'VALIDATE_PASSWORD') {
+				$this->dispMemberModifyInfoBefore();
+				return;
+			}
+
+			$_SESSION['rechecked_password_step'] = 'INPUT_DATA';
+
             $oMemberModel = &getModel('member');
             $oModuleModel = &getModel('module');
             $memberModuleConfig = $oModuleModel->getModuleConfig('member');

@@ -599,11 +599,39 @@
             if(!$trigger_output->toBool()) return $trigger_output;
         }
 
+		/**
+		 * @brief 회원 정보 수정 전 비밀번호 재확인
+		 **/
+		function procMemberModifyInfoBefore() {
+			if($_SESSION['rechecked_password_step'] != 'INPUT_PASSWORD') return $this->stop('msg_invalid_request');
+
+			if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+
+			$password = Context::get('password');
+
+			if(!$password) return $this->stop('msg_invalid_request');
+			$logged_info = Context::get('logged_info');
+			$oMemberModel = &getModel('member');
+
+			if(!$this->memberInfo->password) {
+				$memberInfo = $oMemberModel->getMemberInfoByMemberSrl($logged_info->member_srl);
+				$this->memberInfo->password = $memberInfo->password;
+			}
+			
+			// Verify the cuttent password
+			if(!$oMemberModel->isValidPassword($this->memberInfo->password, $password)) return new Object(-1, 'invalid_password');
+
+			$_SESSION['rechecked_password_step'] = 'VALIDATE_PASSWORD';
+		}
+
         /**
          * @brief 회원 정보 수정
          **/
         function procMemberModifyInfo() {
             if(!Context::get('is_logged')) return $this->stop('msg_not_logged');
+
+            if($_SESSION['rechecked_password_step'] != 'INPUT_DATA') return $this->stop('msg_invalid_request');
+            unset($_SESSION['rechecked_password_step']);
 
             // 필수 정보들을 미리 추출
             $args = Context::gets('user_name','nick_name','homepage','blog','birthday','email_address','allow_mailing','find_account_question','find_account_answer');
