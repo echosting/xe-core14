@@ -647,6 +647,7 @@
      * @brief 해킹 시도로 의심되는 코드들을 미리 차단
      **/
     function removeHackTag($content) {
+        require_once(_XE_PATH_.'classes/security/EmbedFilter.class.php');
         $oEmbedFilter = EmbedFilter::getInstance();
         $oEmbedFilter->check($content);
 
