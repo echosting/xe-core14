@@ -93,6 +93,8 @@
     $lang->cmd_logout = '로그아웃';
     $lang->cmd_signup = '회원 가입';
     $lang->cmd_site_signup = '가입';
+    $lang->msg_rechecked_password = '비밀번호 재확인';
+    $lang->about_rechecked_password = '회원의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인 합니다.';
     $lang->cmd_modify_member_info = '회원 정보 수정';
     $lang->cmd_modify_member_password = '비밀번호 변경';
     $lang->cmd_view_member_info = '회원 정보 보기';
