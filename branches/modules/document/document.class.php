@@ -5,7 +5,6 @@
      * @brief  document 모듈의 high 클래스
      **/
 
-    require_once(_XE_PATH_.'classes/security/EmbedFilter.class.php');
     require_once(_XE_PATH_.'modules/document/document.item.php');
 
     class document extends ModuleObject {
