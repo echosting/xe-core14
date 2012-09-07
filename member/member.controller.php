@@ -427,7 +427,8 @@
             // 해당 mid, vid에 쓰기 권한이 있는지 체크 (2012-06-30 by CMD)
             $oModuleModel = &getModel('module');
             $module_info = $oModuleModel->getModuleInfoByMid(Context::get('mid'));
-            if(!$oModuleModel->getGrant($module_info, $logged_info)->write_document) return new Object(-1, 'msg_not_permitted');
+			$module_grant = $oModuleModel->getGrant($module_info, $logged_info);
+            if(!$module_grant->write_document) return new Object(-1, 'msg_not_permitted');
 
             // form 정보를 모두 받음
             $obj = Context::getRequestVars();
