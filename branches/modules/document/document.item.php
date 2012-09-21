@@ -320,13 +320,17 @@
 
             // 컨텐츠에 대한 조작이 가능한 추가 정보를 설정하였을 경우
             if($add_content_info) {
+				$memberSrl = $this->get('member_srl');
+				if($memberSrl < 0) {
+						$memberSrl = 0;
+				}
                 $content = sprintf(
                         '<!--BeforeDocument(%d,%d)--><div class="document_%d_%d xe_content">%s</div><!--AfterDocument(%d,%d)-->',
-                        $this->document_srl, $this->get('member_srl'),
-                        $this->document_srl, $this->get('member_srl'),
+                        $this->document_srl, $memberSrl,
+                        $this->document_srl, $memberSrl,
                         $content,
-                        $this->document_srl, $this->get('member_srl'),
-                        $this->document_srl, $this->get('member_srl')
+                        $this->document_srl, $memberSrl,
+                        $this->document_srl, $memberSrl
                 );
             // 컨텐츠에 대한 조작이 필요하지 않더라도 xe_content라는 클래스명을 꼭 부여
             } else {
