@@ -590,6 +590,11 @@ class Context {
 			if($this->getRequestMethod()=='GET'&&isset($_GET[$key])) $set_to_vars = true;
 			elseif($this->getRequestMethod()=='POST'&&isset($_POST[$key])) $set_to_vars = true;
 			else $set_to_vars = false;
+			if($set_to_vars) {
+				$val = preg_replace('/<\?.*(\?>)?/iUsm', '', $val);
+				$val = preg_replace('/<\%.*(\%>)?/iUsm', '', $val);
+				$val = preg_replace('/<script(\s|\S)*language[\s]*=("|\')php("|\')(\s|\S)*>.*<[\s]*\/[\s]*script[\s]*>/iUsm', '', $val);
+			}
 
 			$this->set($key, $val, $set_to_vars);
 		}
