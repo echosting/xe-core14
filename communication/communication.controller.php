@@ -187,11 +187,14 @@
             $message = $oCommunicationModel->getSelectedMessage($message_srl);
             if(!$message) return new Object(-1,'msg_invalid_request');
 
-            // 발송인+type=S or 수신인+type=R 검사
-            if($message->sender_srl == $member_srl && $message->message_type == 'S') {
-                if(!$message_srl) return new Object(-1, 'msg_invalid_request');
-            } elseif($message->receiver_srl == $member_srl && $message->message_type == 'R') {
-                if(!$message_srl) return new Object(-1, 'msg_invalid_request');
+            // 권한 확인
+            switch($message->message_type) {
+                case 'S':
+                    if($message->sender_srl != $member_srl) return new Object(-1, 'msg_invalid_request');
+                    break;
+                case 'R':
+                    if($message->receiver_srl != $member_srl) return new Object(-1, 'msg_invalid_request');
+                    break;
             }
 
             // 삭제
