@@ -39,6 +39,9 @@
             Context::set('page', $output->page);
             Context::set('document_list', $output->data);
             Context::set('page_navigation', $output->page_navigation);
+			
+            $oSecurity = new Security();
+            $oSecurity->encodeHTML('document_list..variables.');
 
             // 템플릿에서 사용할 검색옵션 세팅
             $count_search_option = count($this->search_option);
