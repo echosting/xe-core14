@@ -121,8 +121,9 @@
     <tbody>
     <!--@foreach($group_list as $key => $val)-->
     <tr class="row{$cycle_idx}">
-        <td class="center"><div>{$val->title}</div></td>
-        <td class="center"><input type="text" class="inputTypeText w80" value="{$config->point_group[$key]}" name="point_group_{$key}" /></td>
+        <td class="center"><div>{$val->title} <span></span></div></td>
+        <td class="center" cond="$val->is_default != 'Y'"><input type="text" class="inputTypeText w80" value="{$config->point_group[$key]}" name="point_group_{$key}" /></td>
+        <td class="center" cond="$val->is_default == 'Y'"><span>{$lang->default_group}</span></td>
     </tr>
     <!--@end-->
     <tr class="row{$cycle_idx}">
