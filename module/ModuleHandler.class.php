@@ -33,6 +33,12 @@
                 return;
             }
 
+            $oContext = Context::getInstance();
+            if($oContext->isSuccessInit == false) {
+                $this->error = 'msg_invalid_request';
+                return;
+            }
+
             // Set variables from request arguments
             $this->module = $module?$module:Context::get('module');
             $this->act    = $act?$act:Context::get('act');

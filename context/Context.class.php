@@ -45,6 +45,14 @@ class Context {
 
 	var $is_uploaded = false;   ///< true if attached file exists
 
+	var $pattern = array(
+			'/<\?/iUsm',
+			'/<\%/iUsm',
+			'/<script(\s|\S)*language[\s]*=("|\')php("|\')(\s|\S)*/iUsm'
+			);                   ///< Pattern for request vars check
+
+	var $isSuccessInit = true;  ///< Check init
+	
 	/**
 	 * @brief returns static context object (Singleton)
 	 * @return object
@@ -591,12 +599,27 @@ class Context {
 			elseif($this->getRequestMethod()=='POST'&&isset($_POST[$key])) $set_to_vars = true;
 			else $set_to_vars = false;
 			if($set_to_vars) {
-				$val = preg_replace('/<\?/i', '', $val);
-				$val = preg_replace('/<\%/i', '', $val);
-				$val = preg_replace('/<script\s+language\s*=\s*("|\')php("|\')\s*>/ism', '', $val);
+				$this->_recursiveCheckVar($val);
 			}
 
 			$this->set($key, $val, $set_to_vars);
+		}
+	}
+
+	function _recursiveCheckVar($val) {
+		if(is_string($val)) {
+			foreach($this->pattern as $pattern) {
+				$result = preg_match($pattern, $val);
+				if($result) {
+					$this->isSuccessInit = FALSE;
+					return;
+				}
+			}
+		}
+		else if(is_array($val)) {
+			foreach($val as $val2) {
+				$this->_recursiveCheckVar($val2);
+			}
 		}
 	}
 
