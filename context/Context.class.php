@@ -47,10 +47,10 @@ class Context {
 
 	var $is_uploaded = false;   ///< true if attached file exists
 
-	var $pattern = array(
+	var $patterns = array(
 			'/<\?/iUsm',
 			'/<\%/iUsm',
-			'/<script(\s|\S)*language[\s]*=("|\')php("|\')(\s|\S)*/iUsm'
+			'/<script(\s|\S)*language[\s]*=[\s]*("|\')?[\s]*php[\s]*("|\')?(\s|\S)*/iUsm'
 			);                   ///< Pattern for request vars check
 
 	var $isSuccessInit = true;  ///< Check init
@@ -619,7 +619,7 @@ class Context {
 
 	function _recursiveCheckVar($val) {
 		if(is_string($val)) {
-			foreach($this->pattern as $pattern) {
+			foreach($this->patterns as $pattern) {
 				$result = preg_match($pattern, $val);
 				if($result) {
 					$this->isSuccessInit = FALSE;
