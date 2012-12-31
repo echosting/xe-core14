@@ -33,6 +33,12 @@
                 return;
             }
 
+            $oContext = Context::getInstance();
+            if($oContext->isSuccessInit == false) {
+                $this->error = 'msg_invalid_request';
+                return;
+            }
+
             // Set variables from request arguments
             $this->module = $module?$module:Context::get('module');
             $this->act    = $act?$act:Context::get('act');
@@ -45,6 +51,13 @@
             if($this->module && !preg_match("/^([a-z0-9\_\-]+)$/i",$this->module)) die(Context::getLang("msg_invalid_request"));
             if($this->mid && !preg_match("/^([a-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\_\-]+)$/i",$this->mid)) die(Context::getLang("msg_invalid_request"));
             if($this->act && !preg_match("/^([a-z0-9\_\-]+)$/i",$this->act)) die(Context::getLang("msg_invalid_request"));
+
+			if(isset($this->act) && substr($this->act, 0, 4) == 'disp') {
+				if(Context::get('_use_ssl') == 'optional' && Context::isExistsSSLAction($this->act) && $_SERVER['HTTPS'] != 'on') {
+					header('location:https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+					return;
+				}
+			}
 
             // execute addon (before module initialization)
             $called_position = 'before_module_init';

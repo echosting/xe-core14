@@ -617,8 +617,9 @@
 
 						//현재 레벨보다 높은 레벨의 그룹은 삭제
 						foreach($point_group as $group_srl => $target_level) {
-							if($target_level	 > $level) $del_group_list[] = $group_srl;
+							if($target_level > $level) $del_group_list[] = $group_srl;
 						}
+						$del_group_list[] = $default_group->group_srl;
 					}
 					//새 그룹만 부여
 					else {			

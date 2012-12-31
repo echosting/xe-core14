@@ -35,6 +35,9 @@
      **/
     define('__ZBXE__', true);
 
+    // XE 1.5.x와의 호환을 위해 __XE__ 상수도 선언
+    define('__XE__', true);
+
     /**
      * @brief 필요한 설정 파일들을 include 
      **/

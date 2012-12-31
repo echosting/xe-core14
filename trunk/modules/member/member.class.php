@@ -20,11 +20,17 @@
                 Context::addSSLAction('dispMemberModifyPassword');
                 Context::addSSLAction('dispMemberSignUpForm');
                 Context::addSSLAction('dispMemberModifyInfo');
+                Context::addSSLAction('dispMemberResendAuthMail');
+                Context::addSSLAction('dispMemberLoginForm');
+                Context::addSSLAction('dispMemberFindAccount');
+                Context::addSSLAction('dispMemberLeave');
                 Context::addSSLAction('procMemberLogin');
                 Context::addSSLAction('procMemberModifyPassword');
                 Context::addSSLAction('procMemberInsert');
                 Context::addSSLAction('procMemberModifyInfo');
                 Context::addSSLAction('procMemberFindAccount');
+                Context::addSSLAction('procMemberResendAuthMail');
+                Context::addSSLAction('procMemberLeave');
             }
         }
 

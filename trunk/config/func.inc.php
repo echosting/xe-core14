@@ -647,8 +647,12 @@
      * @brief 해킹 시도로 의심되는 코드들을 미리 차단
      **/
     function removeHackTag($content) {
+        require_once(_XE_PATH_.'classes/security/EmbedFilter.class.php');
+        $oEmbedFilter = EmbedFilter::getInstance();
+        $oEmbedFilter->check($content);
+
         // 특정 태그들을 일반 문자로 변경
-        $content = preg_replace('@<(\/?(?:html|body|head|title|meta|base|link|script|style|applet|iframe)(/*)[\w\s>])@i', '&lt;$1', $content);
+        $content = preg_replace('@<(\/?(?:html|body|head|title|meta|base|link|script|style|applet)(/*)[\w\s>])@i', '&lt;$1', $content);
 
         /**
          * 이미지나 동영상등의 태그에서 src에 관리자 세션을 악용하는 코드를 제거
@@ -674,46 +678,55 @@
 		return $content;
 	}
 
-    function removeSrcHack($matches) {
-        $tag = strtolower(trim($matches[2]));
-		
+    function removeSrcHack($match) {
+        $tag = strtolower($match[2]);
+
 		// xmp tag 정리
-		if($tag=='xmp') return '<'.$matches[1].'xmp>';
- 		if($matches[1]=='/') return $matches[0];
+		if($tag=='xmp') return "<{$match[1]}xmp>";
+ 		if($match[1]) return $match[0];
+		if($match[4]) $match[4] = ' '.$match[4];
 
-        //$buff = trim(preg_replace('/(\/>|>)/','/>',$matches[0]));
-        $buff = $matches[0];
-        $buff = str_replace(array('&amp;','&'),array('&','&amp;'),$buff);
-        $buff = preg_replace_callback('/([^=^"^ ]*)=([^ ^>]*)/i', 'fixQuotation', $buff);
+		$attrs = array();
+		if(preg_match_all('/([\w:-]+)\s*=(?:\s*(["\']))?(?(2)(.*?)\2|([^ ]+))/s', $match[3], $m)) {
+			foreach($m[1] as $idx=>$name){
+				if(substr($name,0,2) == 'on') continue;
 
-        $oXmlParser = new XmlParser();
-        $xml_doc = $oXmlParser->parse($buff);
-		if(!$xml_doc) return sprintf("<%s>", $tag);
+				$val = preg_replace('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/e','chr("\\1"?0x00\\1:\\2+0)',$m[3][$idx].$m[4][$idx]);
+				$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
 
-        // src값에 module=admin이라는 값이 입력되어 있으면 이 값을 무효화 시킴
-        $src = $xml_doc->attrs->src;
-        $dynsrc = $xml_doc->attrs->dynsrc;
-        $lowsrc = $xml_doc->attrs->lowsrc;
-        $href = $xml_doc->attrs->href;
-		$data = $xml_doc->attrs->data;
-		$background = $xml_doc->attrs->background;
-		$style = $xml_doc->attrs->style;
-		if($style) {
-			$url = preg_match_all('/url\s*\(([^\)]+)\)/is', $style, $matches2);
-			if(count($matches2[0]))
-			{
-				foreach($matches2[1] as $target)
-				{
-					if(_isHackedSrc($target)) return sprintf("<%s>",$tag);
-				}
+				if(preg_match('/^[a-z]+script:/i', $val)) continue;
+
+				$attrs[$name] = $val;
 			}
 		}
-        if(_isHackedSrc($src) || _isHackedSrc($dynsrc) || _isHackedSrc($lowsrc) || _isHackedSrc($href) || _isHackedSrc($data) || _isHackedSrc($background) || _isHackedSrcExp($style)) return sprintf("<%s>",$tag);
 
-		if($tag=='param' && $xml_doc->attrs->value && preg_match('/^javascript:/i',$xml_doc->attrs->value)) return sprintf("<%s>",$tag);
-		if($tag=='object' && $xml_doc->attrs->data && preg_match('/^javascript:/i',$xml_doc->attrs->data)) return sprintf("<%s>",$tag);
+		if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) {
+			unset($attrs['style']);
+		}
 
-        return $buff;
+		$attr = array();
+		foreach($attrs as $name=>$val) {
+			if($tag == 'object' || $tag == 'embed' || $tag == 'a') {
+				$attribute = strtolower(trim($name));
+				if($attribute == 'data' || $attribute == 'src' || $attribute == 'href') {
+					if(strpos(strtolower($val), 'data:') === 0) {
+						continue;
+					}
+				}
+			}
+
+			if($tag == 'img') {
+				$attribute = strtolower(trim($name));
+				if(strpos(strtolower($val), 'data:') === 0) {
+					continue;
+				}
+			}
+			$val    = str_replace('"', '&quot;', $val);
+			$attr[] = $name."=\"{$val}\"";
+		}
+		$attr = count($attr)?' '.implode(' ',$attr):'';
+
+        return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
     }
 
 	function _isHackedSrcExp($style) {
