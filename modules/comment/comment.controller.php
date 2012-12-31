@@ -589,10 +589,10 @@
                 $args->ipaddress = $_SERVER['REMOTE_ADDR'];
             }
             $args->comment_srl = $comment_srl;
-            $output = executeQuery('comment.getCommentDeclaredLogInfo', $args);
+            $log_output = executeQuery('comment.getCommentDeclaredLogInfo', $args);
 
             // 로그 정보에 신고 로그가 있으면 세션 등록후 패스
-            if($output->data->count) {
+            if($log_output->data->count) {
                 $_SESSION['declared_comment'][$comment_srl] = true;
                 return new Object(-1, 'failed_declared');
             }

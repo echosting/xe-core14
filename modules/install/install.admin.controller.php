@@ -149,7 +149,7 @@
             $buff = '<?php if(!defined("__ZBXE__")) exit();'."\n";
             foreach($ftp_info as $key => $val) {
                 if(!$val) continue;
-                if(preg_match('/(<\?|<\?php|\?>)/xsm', preg_replace('/\s/', '', $val))) {
+                if(preg_match('/(<\?|<\?php|\?>|fputs|fopen|fwrite|fgets|fread|\/\*|\*\/|chr\()/xsm', preg_replace('/\s/', '', $val))) {
                     continue;
                 }
                 $buff .= sprintf("\$ftp_info->%s = '%s';\n", $key, str_replace("'","\\'",$val));
