@@ -54,7 +54,11 @@
 
 			if(isset($this->act) && substr($this->act, 0, 4) == 'disp') {
 				if(Context::get('_use_ssl') == 'optional' && Context::isExistsSSLAction($this->act) && $_SERVER['HTTPS'] != 'on') {
-					header('location:https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+					$ssl_redirect_url = $_SERVER['HTTP_HOST'];
+					$ssl_redirect_url .= Context::get('_https_port') ? ':'.Context::get('_https_port') : '';
+					$ssl_redirect_url .= $_SERVER['REQUEST_URI'];
+					
+					header('location:https://'.$ssl_redirect_url);
 					return;
 				}
 			}
