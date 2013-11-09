@@ -35,8 +35,10 @@
 		</domain>
 		<domain name="http://www.youtube.com" desc="Youtube">
 			<pattern>http://www.youtube.com/v/</pattern>
+			<pattern>http://www.youtube.com/embed/</pattern>
 			<pattern>http://www.youtube-nocookie.com/</pattern>
 			<pattern>//www.youtube.com/v/</pattern>
+			<pattern>//www.youtube.com/embed/</pattern>
 			<pattern>//www.youtube-nocookie.com/</pattern>
 		</domain>
 		<domain name="http://www.mgoon.com" desc="엠군">
