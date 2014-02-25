@@ -1327,7 +1327,7 @@ class documentController extends document {
 				'$group_srls = array_keys($logged_info->group_list); '.
 			'} else { '.
 				'$is_admin = false; '.
-				'$group_srsl = array(); '.
+				'$group_srls = array(); '.
 			'} '."\n";
 
 		// xml 캐시 파일 생성 (xml캐시는 따로 동작하기에 session 지정을 해주어야 함)
